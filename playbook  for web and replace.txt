@@ -1,0 +1,31 @@
+---
+- name: This is my first play.
+  hosts: all
+  remote_user: ansible
+  become: true
+  #sudo: yes #to use sudo either one can be used become or sudo.
+  tasks:
+  - name: To install the package.
+    yum:
+      name: httpd
+      state: latest
+
+  - name: To configure the web page.
+    copy:
+      src: index.html
+      dest: /var/www/html/index.html
+      mode: 0644
+
+  - name: To replace the content in the index.html file.
+    replace:
+      path: /var/www/html/index.html
+      regexp: 'server'
+      replace: 'host'
+      backup: yes
+
+  - name: To start the service.
+    service:
+      name: httpd
+      state: restarted
+      enabled: true
+...
